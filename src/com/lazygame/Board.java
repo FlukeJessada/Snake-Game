@@ -30,6 +30,7 @@ public class Board extends JPanel implements ActionListener {
     private int dots;
     private int apple_x;
     private int apple_y;
+    private int score;
 
     private boolean leftDirection = false;
     private boolean rightDirection = true;
@@ -73,6 +74,7 @@ public class Board extends JPanel implements ActionListener {
     private void initGame() {
 
         dots = 3;
+        score = 0;
 
         for (int i=0; i<dots; i++) {
             x[i] = 50 - i * 10;
@@ -95,6 +97,18 @@ public class Board extends JPanel implements ActionListener {
     private void doDrawing(Graphics g) {
         
         if (inGame) {
+            String s = Integer.toString(score);
+            Font small = new Font("Consolas", Font.PLAIN, 16);
+            FontMetrics metr = getFontMetrics(small);
+            int ss = 50;
+            if ((score - ss) == 0) {
+                g.setColor(Color.GREEN);
+                ss+=50;
+            } else {
+                g.setColor(Color.white);
+            }
+            g.setFont(small);
+            g.drawString(s, (B_WIDTH - metr.stringWidth(s)) / 2, B_HEIGHT / 2);
 
             g.drawImage(apple, apple_x, apple_y, this);
 
@@ -116,21 +130,23 @@ public class Board extends JPanel implements ActionListener {
 
     private void gameOver(Graphics g) {
         
-        String msg[] =  {"Game Over", "Press SPACE to restart."};
+        String msg[] =  {"Game Over", Integer.toString(score), "Press SPACE to restart."};
         Font small = new Font("Consolas", Font.PLAIN, 16);
         FontMetrics metr = getFontMetrics(small);
 
         g.setColor(Color.white);
         g.setFont(small);
         g.drawString(msg[0], (B_WIDTH - metr.stringWidth(msg[0])) / 2, B_HEIGHT / 2);
-        g.drawString(msg[1], (B_WIDTH - metr.stringWidth(msg[1])) / 2, B_HEIGHT / 2 + 80);
+        g.drawString(msg[1], (B_WIDTH - metr.stringWidth(msg[1])) / 2, B_HEIGHT / 2 + 40);
+        g.drawString(msg[2], (B_WIDTH - metr.stringWidth(msg[2])) / 2, B_HEIGHT / 2 + 80);
     }
 
     private void checkApple() {
 
         if ((x[0] == apple_x) && (y[0] == apple_y)) {
-
             dots++;
+            score++;
+            System.out.println(score);
             locateApple();
         }
     }
